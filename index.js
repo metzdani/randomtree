@@ -38,7 +38,7 @@ import TreeNode from './TreeNode.js';
 		}
 		var num = Math.round(rand(minChild, maxChild));
 		for (var i=0; i<num; i++) {
-			var idealAngle =  lint(-fullAngle/2, fullAngle/2, i/(num-1));
+			var idealAngle =  lint(-fullAngle/2, fullAngle/2, i, num-1);
 			parent.children.push(new TreeNode(parent.p1, randAround(parent.angle+idealAngle, angleRand), parent.length*randAround(lenghtRatio,lengthRand), parent.width*randAround(widthRatio, widthRand)));
 		}
 		parent.children.forEach(function(child){buildTree(child, level-1);});
@@ -55,7 +55,7 @@ import TreeNode from './TreeNode.js';
 
 		context.moveTo(sp0.x, sp0.y);
 		for (var i=1; i<numberOfSegments-1; i++) {
-			var idealPos = vLint(sp0, sp1, i/(numberOfSegments-1));
+			var idealPos = vLint(sp0, sp1, i, numberOfSegments-1);
 			var maxDist = len/numberOfSegments * 0.2;
 			var posAdd = new Vec2(rand(-1,1), rand(-1,1)).normalize().scale(maxDist);
 			idealPos.add(posAdd);
@@ -81,12 +81,13 @@ import TreeNode from './TreeNode.js';
 		return ideal + rand(-rnd, rnd);
 	}
 
-	function lint(lower, upper, x) {
-		return (1.0-x)*lower + x*upper;
+	function lint(lower, upper, t, maxT) {
+		t = maxT==0 ? 1 : t/maxT;
+		return (1.0-t)*lower + t*upper;
 	}
 
-	function vLint(lower, upper, x) {
-		return new Vec2(lint(lower.x, upper.x, x), lint(lower.y, upper.y, x));
+	function vLint(lower, upper, t, maxT) {
+		return new Vec2(lint(lower.x, upper.x, t, maxT), lint(lower.y, upper.y, t, maxT));
 	}
 
 })();
