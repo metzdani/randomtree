@@ -12,14 +12,14 @@ import TreeNode from './TreeNode.js';
 	context.lineCap = 'round'
 	context.strokeStyle = 'rgb(20,10,10)';
 
-	var generations = 9;
+	var generations = 8;
 	var fullAngle = Math.PI / 3;
 	var angleRand = 0.3;
 	var lenghtRatio = 0.65;
 	var lengthRand = 0.15;
 	var widthRatio = 0.5;
 	var widthRand = 0.1;
-	var minChild=3, maxChild=4;
+	var minChild=3, maxChild=5;
 
 	var rootLength = 0.25;
 	var rootWidth= 0.05;
@@ -51,12 +51,12 @@ import TreeNode from './TreeNode.js';
 		var sp1 = scrPos(node.p1);
 
 		var len = new Vec2(sp0.x-sp1.x, sp0.y-sp1.y).length();
-		var bseg = len/10;
+		var numberOfSegments = len/10;
 
 		context.moveTo(sp0.x, sp0.y);
-		for (var i=1; i<bseg-1; i++) {
-			var idealPos = vLint(sp0, sp1, i/(bseg-1));
-			var maxDist = len/bseg * 0.25;
+		for (var i=1; i<numberOfSegments-1; i++) {
+			var idealPos = vLint(sp0, sp1, i/(numberOfSegments-1));
+			var maxDist = len/numberOfSegments * 0.2;
 			var posAdd = new Vec2(rand(-1,1), rand(-1,1)).normalize().scale(maxDist);
 			idealPos.add(posAdd);
 			context.lineTo(idealPos.x, idealPos.y)
