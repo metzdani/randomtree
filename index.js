@@ -17,8 +17,8 @@ import TreeNode from './TreeNode.js';
 	var angleRand = Math.PI / 7;
 	var lenghtRatio = 0.7;
 	var lengthRand = 0.09;
-	var widthRatio = 0.45;
-	var widthRand = 0.1;
+	var widthRatio = 0.5;
+	var widthRand = 0.05;
 	var minChild=3, maxChild=5;
 
 	var rootLength = 0.25;
