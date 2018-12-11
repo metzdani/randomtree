@@ -22,7 +22,8 @@ import TreeNode from './TreeNode.js';
 	canvas.style["left"]="0";
 	canvas.style["z-index"]="-1"
 
-	var screen = new Vec2(canvas.width=innerWidth, canvas.height=innerHeight);
+	var screen = new Vec2();
+	var scrDim;
 	var context = canvas.getContext('2d');
 
 	var redrawBtn = document.createElement('button');
@@ -44,11 +45,16 @@ import TreeNode from './TreeNode.js';
 	buildTree(root, generations);
 
 	window.onload = window.onresize = function() {
-		screen.set(canvas.width=innerWidth, canvas.height=innerHeight);
+		initScreen();
 		context.lineCap = 'round';
-		context.strokeStyle = 'rgb(20,10,10)';
+		context.strokeStyle = 'rgb(30,15,15)';
 		redraw();
 	};
+
+	function initScreen() {
+		screen.set(canvas.width=innerWidth, canvas.height=innerHeight);
+		scrDim = Math.min(screen.x, screen.y);
+	}
 
 	function redraw() {
 		context.clearRect(0,0,canvas.width,canvas.height);
@@ -57,9 +63,7 @@ import TreeNode from './TreeNode.js';
 	
 	
 	function scrPos(point){
-		return screen.x > screen.y 
-			? new Vec2(point.x*screen.y+screen.x/2, -1*point.y*screen.y+screen.y/2)
-			: new Vec2(point.x*screen.x+screen.x/2, -1*point.y*screen.x+screen.y/2);
+		return new Vec2(point.x*scrDim+screen.x/2, -1*point.y*scrDim+screen.y/2)
 	}
 
 	function buildTree(parent, level) {
@@ -81,23 +85,23 @@ import TreeNode from './TreeNode.js';
 		var sp0 = scrPos(node.p0);
 		var sp1 = scrPos(node.p1);
 
-		var len = new Vec2(sp0.x-sp1.x, sp0.y-sp1.y).length();
-		var numberOfSegments = len/10;
+		var len = node.length * scrDim ;
+		var numberOfSegments = Math.min(len/5, 12)
 
 		context.moveTo(sp0.x, sp0.y);
 		for (var i=1; i<numberOfSegments-1; i++) {
 			var idealPos = vLint(sp0, sp1, i, numberOfSegments-1);
-			var maxDist = len/numberOfSegments * 0.2;
-			var posAdd = new Vec2(rand(-1,1), rand(-1,1)).normalize().scale(maxDist);
-			idealPos.add(posAdd);
-			context.lineTo(idealPos.x, idealPos.y)
+			var maxDist = len/numberOfSegments * 0.18;
+			var actualPos = new Vec2(rand(-1,1), rand(-1,1)).normalize().scale(maxDist);
+			actualPos.add(idealPos);
+			context.lineTo(actualPos.x, actualPos.y)
 		}
 		context.lineTo(sp1.x, sp1.y);
 
 		//context.moveTo(sp0.x, sp0.y);
 		//context.lineTo(sp1.x, sp1.y);
 
-		context.lineWidth=node.width*Math.min(screen.x, screen.y);
+		context.lineWidth=node.width*scrDim;
 		context.stroke();
 
 		node.children.forEach(function(child){drawTree(child)});
