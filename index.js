@@ -24,7 +24,7 @@ import TreeNode from './TreeNode.js';
 	var rootLength = 0.25;
 	var rootWidth= 0.05;
 
-	var root = new TreeNode(new Vec2(0,-0.4), 0.0, rootLength, rootWidth);
+	var root = new TreeNode(new Vec2(0,-0.47), 0.0, rootLength, rootWidth);
 	buildTree(root, generations);
 	drawTree(root);
 	
