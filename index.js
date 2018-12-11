@@ -2,15 +2,6 @@ import Vec2 from './Vec2.js';
 import TreeNode from './TreeNode.js';
 
 (function() {
-	
-	var canvas = document.createElement('canvas');
-	canvas.style["background-color"]="transparent";
-	document.body.appendChild(canvas); 
-	var screen = new Vec2(canvas.width=innerWidth, canvas.height=innerHeight);
-	var context = canvas.getContext('2d');
-	
-	context.lineCap = 'round'
-	context.strokeStyle = 'rgb(20,10,10)';
 
 	var generations = 8;
 	var fullAngle = Math.PI / 2.5;
@@ -23,6 +14,37 @@ import TreeNode from './TreeNode.js';
 
 	var rootLength = 0.25;
 	var rootWidth= 0.05;
+
+	var canvas = document.createElement('canvas');
+	canvas.style["background-color"]="transparent";
+	canvas.style["position"]="fixed";
+	canvas.style["top"]="0";
+	canvas.style["left"]="0";
+	canvas.style["z-index"]="-1"
+
+	var screen = new Vec2(canvas.width=innerWidth, canvas.height=innerHeight);
+	var context = canvas.getContext('2d');
+	context.lineCap = 'round'
+	context.strokeStyle = 'rgb(20,10,10)';
+
+	var redrawBtn = document.createElement('button');
+	redrawBtn.appendChild(document.createTextNode("Redraw"));
+	redrawBtn.addEventListener("click", function(){
+		context.clearRect(0,0,canvas.width,canvas.height);
+		drawTree(root);
+	});
+	var rebuildBtn = document.createElement('button');
+	rebuildBtn.appendChild(document.createTextNode("Rebuild"));
+	rebuildBtn.addEventListener("click", function(){
+		root = new TreeNode(new Vec2(0,-0.47), 0.0, rootLength, rootWidth);
+		context.clearRect(0,0,canvas.width,canvas.height);
+		buildTree(root, generations)
+		drawTree(root);
+	});
+	document.body.appendChild(canvas);
+	document.body.appendChild(redrawBtn);
+	document.body.appendChild(rebuildBtn);
+
 
 	var root = new TreeNode(new Vec2(0,-0.47), 0.0, rootLength, rootWidth);
 	buildTree(root, generations);
