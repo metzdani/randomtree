@@ -13,18 +13,18 @@ import TreeNode from './TreeNode.js';
 	context.strokeStyle = 'rgb(20,10,10)';
 
 	var generations = 8;
-	var fullAngle = Math.PI / 3;
-	var angleRand = 0.3;
-	var lenghtRatio = 0.65;
-	var lengthRand = 0.15;
-	var widthRatio = 0.5;
+	var fullAngle = Math.PI / 2.5;
+	var angleRand = Math.PI / 7;
+	var lenghtRatio = 0.7;
+	var lengthRand = 0.09;
+	var widthRatio = 0.45;
 	var widthRand = 0.1;
 	var minChild=3, maxChild=5;
 
 	var rootLength = 0.25;
 	var rootWidth= 0.05;
 
-	var root = new TreeNode(new Vec2(0,-0.5), 0.0, rootLength, rootWidth);
+	var root = new TreeNode(new Vec2(0,-0.4), 0.0, rootLength, rootWidth);
 	buildTree(root, generations);
 	drawTree(root);
 	
@@ -39,7 +39,8 @@ import TreeNode from './TreeNode.js';
 		var num = Math.round(rand(minChild, maxChild));
 		for (var i=0; i<num; i++) {
 			var idealAngle =  lint(-fullAngle/2, fullAngle/2, i, num-1);
-			parent.children.push(new TreeNode(parent.p1, randAround(parent.angle+idealAngle, angleRand), parent.length*randAround(lenghtRatio,lengthRand), parent.width*randAround(widthRatio, widthRand)));
+			var origin = vLint(parent.p0, parent.p1, rand(0.9, 1), 1);
+			parent.children.push(new TreeNode(origin, randAround(parent.angle+idealAngle, angleRand), parent.length*randAround(lenghtRatio,lengthRand), parent.width*randAround(widthRatio, widthRand)));
 		}
 		parent.children.forEach(function(child){buildTree(child, level-1);});
 		
