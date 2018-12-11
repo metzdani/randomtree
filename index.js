@@ -97,7 +97,7 @@ import TreeNode from './TreeNode.js';
 		//context.moveTo(sp0.x, sp0.y);
 		//context.lineTo(sp1.x, sp1.y);
 
-		context.lineWidth=node.width*screen.y;
+		context.lineWidth=node.width*Math.min(screen.x, screen.y);
 		context.stroke();
 
 		node.children.forEach(function(child){drawTree(child)});
