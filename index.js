@@ -61,7 +61,7 @@ import TreeNode from './TreeNode.js';
 		var num = Math.round(rand(minChild, maxChild));
 		for (var i=0; i<num; i++) {
 			var idealAngle =  lint(-fullAngle/2, fullAngle/2, i, num-1);
-			var origin = vLint(parent.p0, parent.p1, rand(0.9, 1), 1);
+			var origin = vLint(parent.p0, parent.p1, rand(1.0, 1), 1);
 			parent.children.push(new TreeNode(origin, randAround(parent.angle+idealAngle, angleRand), parent.length*randAround(lenghtRatio,lengthRand), parent.width*randAround(widthRatio, widthRand)));
 		}
 		parent.children.forEach(function(child){buildTree(child, level-1);});
