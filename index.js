@@ -24,22 +24,16 @@ import TreeNode from './TreeNode.js';
 
 	var screen = new Vec2(canvas.width=innerWidth, canvas.height=innerHeight);
 	var context = canvas.getContext('2d');
-	context.lineCap = 'round'
-	context.strokeStyle = 'rgb(20,10,10)';
 
 	var redrawBtn = document.createElement('button');
 	redrawBtn.appendChild(document.createTextNode("Redraw"));
-	redrawBtn.addEventListener("click", function(){
-		context.clearRect(0,0,canvas.width,canvas.height);
-		drawTree(root);
-	});
+	redrawBtn.addEventListener("click", redraw);
 	var rebuildBtn = document.createElement('button');
 	rebuildBtn.appendChild(document.createTextNode("Rebuild"));
 	rebuildBtn.addEventListener("click", function(){
 		root = new TreeNode(new Vec2(0,-0.47), 0.0, rootLength, rootWidth);
-		context.clearRect(0,0,canvas.width,canvas.height);
 		buildTree(root, generations)
-		drawTree(root);
+		redraw();
 	});
 	document.body.appendChild(canvas);
 	document.body.appendChild(redrawBtn);
@@ -48,10 +42,24 @@ import TreeNode from './TreeNode.js';
 
 	var root = new TreeNode(new Vec2(0,-0.47), 0.0, rootLength, rootWidth);
 	buildTree(root, generations);
-	drawTree(root);
+
+	window.onload = window.onresize = function() {
+		screen.set(canvas.width=innerWidth, canvas.height=innerHeight);
+		context.lineCap = 'round';
+		context.strokeStyle = 'rgb(20,10,10)';
+		redraw();
+	};
+
+	function redraw() {
+		context.clearRect(0,0,canvas.width,canvas.height);
+		drawTree(root);
+	}
+	
 	
 	function scrPos(point){
-		return new Vec2((point.x*screen.x)*screen.y/screen.x+screen.x/2, -1*point.y*screen.y+screen.y/2);
+		return screen.x > screen.y 
+			? new Vec2(point.x*screen.y+screen.x/2, -1*point.y*screen.y+screen.y/2)
+			: new Vec2(point.x*screen.x+screen.x/2, -1*point.y*screen.x+screen.y/2);
 	}
 
 	function buildTree(parent, level) {
