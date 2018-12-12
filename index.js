@@ -56,7 +56,13 @@ import FormHelper from './FormHelper.js';
 	helper.rangeInput("Root length", 0, 100, rootLength*100, (e)=>{rootLength = e.target.value/100; rebuild(); redraw();}, document.body);
 	helper.rangeInput("Branch length ratio", 0, 100, lenghtRatio*100, (e)=>{lenghtRatio = e.target.value/100; rebuild(); redraw();}, document.body);
 	helper.rangeInput("Length max. random", 0, 100, lengthRand*100, (e)=>{lengthRand = e.target.value/100; rebuild(); redraw();}, document.body);
-	helper.rangeInput("Root width", 0, 200, rootWidth*1000, (e)=>{rootWidth = e.target.value/1000; rebuild(); redraw();}, document.body);
+	helper.rangeInput("Root width", 1, 200, rootWidth*1000, (e)=>{
+			var originalWidth = rootWidth;
+			rootWidth = e.target.value/1000;
+			modifyWidth(root, rootWidth/originalWidth);
+			redraw();
+		}, document.body
+	);
 	helper.rangeInput("Branch width ratio", 0, 100, widthRatio*100, (e)=>{widthRatio = e.target.value/100; rebuild(); redraw();}, document.body);
 	helper.rangeInput("Width max. random", 0, 200, widthRand*500, (e)=>{widthRand = e.target.value/500; rebuild(); redraw();}, document.body);
 
@@ -106,7 +112,11 @@ import FormHelper from './FormHelper.js';
 			parent.children.push(new TreeNode(origin, randAround(parent.angle+idealAngle, angleRand), parent.length*randAround(lenghtRatio,lengthRand), parent.width*randAround(widthRatio, widthRand)));
 		}
 		parent.children.forEach(function(child){buildTree(child, level-1);});
-		
+	}
+
+	function modifyWidth(node, factor) {
+		node.width *= factor;
+		node.children.forEach((child)=>{modifyWidth(child, factor)});
 	}
 
 	function drawTree(node) {
